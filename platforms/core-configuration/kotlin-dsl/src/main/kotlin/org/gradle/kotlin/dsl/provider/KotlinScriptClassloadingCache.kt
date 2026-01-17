@@ -33,10 +33,10 @@ class KotlinScriptClassloadingCache @Inject constructor(
 ) {
 
     private
-    val cache: CrossBuildInMemoryCache<ProgramId, CompiledScript> = cacheFactory.newCache { reused -> reused.onReuse() }
+    val cache: CrossBuildInMemoryCache<ProgramId, CompiledScript> = cacheFactory.newCache()// { reused -> reused.onReuse() }
 
     fun get(key: ProgramId): CompiledScript? =
-        cache.getIfPresent(key)
+        cache.getIfPresent(key)?.also { it.onReuse() }
 
     fun put(key: ProgramId, loadedScriptClass: CompiledScript) {
         cache.put(key, loadedScriptClass)
